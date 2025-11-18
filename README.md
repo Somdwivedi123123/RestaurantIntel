@@ -34,20 +34,33 @@ RestaurantIntel/
 │   │   ├── analyze/         # AI analysis endpoints
 │   │   └── reports/         # Report generation
 │   ├── dashboard/           # Dashboard pages
+│   │   ├── competitive/     # Competitive intelligence UI
+│   │   ├── pricing/         # Dynamic pricing optimizer UI
+│   │   ├── operations/      # Peak hours & operations UI
+│   │   ├── regulatory/      # Regulatory intelligence UI
+│   │   ├── retention/       # Guest retention engine UI
+│   │   ├── layout.tsx       # Dashboard layout with navigation
+│   │   └── page.tsx         # Main dashboard
 │   ├── layout.tsx           # Root layout
 │   ├── page.tsx             # Landing page
 │   └── globals.css          # Global styles
 ├── components/              # React components
 │   ├── ui/                  # Reusable UI components
+│   │   ├── Button.tsx       # Button component
+│   │   └── Card.tsx         # Card component
 │   └── dashboard/           # Dashboard-specific components
+│       ├── DashboardNav.tsx # Navigation sidebar
+│       └── MetricCard.tsx   # Metric display card
 ├── lib/                     # Core libraries
 │   ├── ai/                  # AI agents and models
 │   │   ├── gemini.ts       # Gemini API integration
-│   │   └── langgraph-agents.ts  # LangGraph agent orchestration
+│   │   └── langgraph-agents.ts  # AI agent implementations
 │   ├── firebase/            # Firebase configuration
 │   │   ├── config.ts       # Client-side config
 │   │   └── admin.ts        # Server-side admin SDK
 │   ├── services/            # Business logic services
+│   │   ├── firestore.ts    # Firestore CRUD operations
+│   │   └── data-pipeline.ts # Data collection & quality monitoring
 │   │   └── firestore.ts    # Firestore CRUD operations
 │   ├── types/               # TypeScript type definitions
 │   └── utils.ts             # Utility functions
@@ -148,40 +161,94 @@ firebase deploy --only storage
 
 ## Key Features
 
-### 1. Competitive Intelligence Module
+### 1. Competitive Intelligence Module (/dashboard/competitive)
 
-Track and analyze competitor data in real-time:
+Full-featured UI for tracking and analyzing competitor data in real-time:
 
-- Menu pricing comparisons
-- Review scores and sentiment
-- Regulatory compliance tracking
-- Automated competitive benchmarking
+- **Competitor Overview Table**: Real-time comparison of pricing, ratings, and reviews
+- **Strategic Insights**: AI-generated competitive opportunities
+- **Price Comparison Trends**: Visual tracking of pricing changes
+- **Distance-based Analysis**: Local market intelligence
+- **Key Metrics**:
+  - Average price tracking
+  - Review score monitoring
+  - Violation tracking for competitors
+  - Distance and market overlap analysis
 
 **API Endpoint**: `POST /api/analyze/competitive`
+**Page**: `/dashboard/competitive`
 
-### 2. Dynamic Pricing Optimizer
+### 2. Dynamic Pricing Optimizer (/dashboard/pricing)
 
-AI-powered pricing recommendations:
+Complete pricing optimization interface with AI recommendations:
 
-- Demand elasticity analysis
-- Competitor pricing intelligence
-- Profit margin optimization
-- Revenue impact projections
+- **Pricing Recommendations**: Item-by-item price suggestions
+- **Impact Analysis**: Revenue, demand, and profit projections
+- **Confidence Scoring**: AI certainty levels for each recommendation
+- **One-Click Actions**: Accept or reject pricing changes
+- **Strategic Reasoning**: Detailed explanations for each suggestion
+- **Key Metrics**:
+  - Total potential revenue impact
+  - Pending recommendations count
+  - Average AI confidence score
+  - Segment-based pricing analysis
 
 **API Endpoint**: `POST /api/analyze/pricing`
+**Page**: `/dashboard/pricing`
 
-### 3. Operational Optimization
+### 3. Operations & Peak Hours (/dashboard/operations)
 
-Predict and optimize daily operations:
+Advanced operational forecasting and staffing optimization:
 
-- Peak hour forecasting
-- Table turnover analysis
-- Staff scheduling recommendations
-- Capacity planning
+- **Hourly Demand Forecast**: 24-hour customer traffic predictions
+- **Smart Staffing**: AI-recommended staff levels (waiters, kitchen, host)
+- **Table Turnover**: Predicted turnover rates per hour
+- **External Factors**: Weather, events, and day-type analysis
+- **Visual Demand Indicators**: Color-coded demand levels
+- **Key Metrics**:
+  - Peak hour identification
+  - Maximum staff requirements
+  - Average table turnover rate
+  - Prediction confidence scores
 
 **API Endpoint**: `POST /api/analyze/operations`
+**Page**: `/dashboard/operations`
 
-### 4. AI Strategy Reports
+### 4. Regulatory Intelligence (/dashboard/regulatory)
+
+Health inspection and compliance monitoring:
+
+- **Your Inspection Score**: Track your compliance performance
+- **Competitor Inspections**: Monitor nearby restaurant violations
+- **Violation Tracking**: Categorized by severity (critical, major, minor)
+- **Competitive Advantage**: Identify marketing opportunities from superior compliance
+- **Strategic Insights**: Auto-generated compliance recommendations
+- **Key Metrics**:
+  - Your inspection score
+  - Competitor average score
+  - Your competitive advantage (points ahead)
+  - Violation count and correction status
+
+**Page**: `/dashboard/regulatory`
+
+### 5. Guest Retention Engine (/dashboard/retention)
+
+Churn prediction and automated retention campaigns:
+
+- **Guest Segmentation**: VIP, Regular, Occasional, At-Risk
+- **Churn Probability**: AI-predicted risk scores for each guest
+- **Lifetime Value**: Customer LTV calculations
+- **Retention Strategies**: Personalized campaign recommendations
+- **Automated Campaigns**: Win-back, VIP rewards, birthday specials
+- **Key Metrics**:
+  - Total active guests
+  - High-risk guest count
+  - Total lifetime value
+  - Average churn probability
+
+**Page**: `/dashboard/retention`
+
+### 6. AI Strategy Reports
 
 Comprehensive strategic reports with:
 
@@ -337,27 +404,35 @@ Content-Type: application/json
 
 ## Roadmap
 
-### MVP (Current)
+### MVP (Current) ✅
 - ✅ Core dashboard and metrics
-- ✅ AI agent orchestration
+- ✅ AI agent orchestration (5 specialized agents)
 - ✅ Firebase integration
-- ✅ Basic competitive intelligence
-- ✅ Pricing recommendations
-- ✅ Operational predictions
+- ✅ **Competitive Intelligence page** - Real-time competitor tracking
+- ✅ **Dynamic Pricing Optimizer** - AI-powered pricing recommendations
+- ✅ **Operations & Peak Hours** - Staffing optimization
+- ✅ **Regulatory Intelligence** - Health inspection monitoring
+- ✅ **Guest Retention Engine** - Churn prediction & campaigns
+- ✅ Navigation system with responsive sidebar
+- ✅ Data pipeline infrastructure with quality monitoring
+- ✅ Self-healing capabilities (retry logic, auto-correction)
 
-### Phase 2
+### Phase 2 (In Progress)
+- [ ] Firebase Authentication implementation
+- [ ] Real-time data synchronization
 - [ ] Advanced data scraping pipelines
-- [ ] Real-time competitive monitoring
-- [ ] Guest retention campaigns
 - [ ] Automated report scheduling
-- [ ] Mobile-responsive PWA
+- [ ] Email notification system
+- [ ] Mobile PWA optimization
+- [ ] Chart visualizations (Recharts integration)
 
 ### Phase 3
-- [ ] Self-healing data pipelines
 - [ ] Multi-restaurant management
-- [ ] Advanced analytics dashboards
-- [ ] Integration with POS systems
-- [ ] API marketplace for third-party integrations
+- [ ] Integration with POS systems (Square, Toast, Clover)
+- [ ] Third-party aggregator APIs (Zomato, Swiggy, Uber Eats)
+- [ ] Advanced ML models for prediction accuracy
+- [ ] API marketplace for extensions
+- [ ] White-label solution
 
 ## Contributing
 
