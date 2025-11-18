@@ -1,0 +1,80 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasRestaurantAccess(restaurantId) {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/restaurants/$(restaurantId))
+          .data.ownerId == request.auth.uid;
+    }
+
+    // Restaurants collection
+    match /restaurants/{restaurantId} {
+      allow read: if hasRestaurantAccess(restaurantId);
+      allow create: if isAuthenticated();
+      allow update, delete: if hasRestaurantAccess(restaurantId);
+    }
+
+    // Menu items
+    match /menuItems/{itemId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRestaurantAccess(resource.data.restaurantId);
+    }
+
+    // Competitors
+    match /competitors/{competitorId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRestaurantAccess(resource.data.restaurantId);
+    }
+
+    // Performance metrics
+    match /metrics/{metricId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRestaurantAccess(resource.data.restaurantId);
+    }
+
+    // Pricing recommendations
+    match /pricingRecommendations/{recId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRestaurantAccess(resource.data.restaurantId);
+    }
+
+    // AI Insights
+    match /insights/{insightId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRestaurantAccess(resource.data.restaurantId);
+    }
+
+    // Guests
+    match /guests/{guestId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRestaurantAccess(resource.data.restaurantId);
+    }
+
+    // Health inspections
+    match /inspections/{inspectionId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated(); // Can add competitor inspections
+    }
+
+    // Users
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Strategy reports
+    match /reports/{reportId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRestaurantAccess(resource.data.restaurantId);
+    }
+  }
+}
